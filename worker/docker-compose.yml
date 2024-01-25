@@ -1,0 +1,15 @@
+services:
+  redis:
+    restart: unless-stopped
+    image: redis
+    ports:
+      - 6379:6379
+
+  worker:
+    restart: unless-stopped
+    build:
+      context: .
+    volumes:
+      - ./:/app
+    depends_on:
+      - redis

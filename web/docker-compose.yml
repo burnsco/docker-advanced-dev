@@ -1,0 +1,11 @@
+services:
+  frontend:
+    restart: always
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    ports:
+      - 5174:5173
+    volumes:
+      - /app/node_modules
+      - .:/app
