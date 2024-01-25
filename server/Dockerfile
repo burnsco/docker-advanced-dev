@@ -9,5 +9,5 @@ COPY index.ts ./
 
 # run the app
 USER bun
-EXPOSE 3000/tcp
+EXPOSE 5000/tcp
 ENTRYPOINT [ "bun", "--watch", "index.ts" ]

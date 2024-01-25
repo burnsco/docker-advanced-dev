@@ -4,7 +4,7 @@ import express from 'express';
 import { createClient } from 'redis';
 import * as db from './db';
 
-const port = 3000;
+const port = 5000;
 
 async function main() {
   const app = express();
@@ -19,7 +19,7 @@ async function main() {
     .on('error', (err) => console.log('Redis Client Error', err))
     .connect();
 
-  const redisPub = client.duplicate();
+  const publisher = client.duplicate();
 
   await client.set('views', 0);
 
@@ -36,6 +36,25 @@ async function main() {
   app.get('/values/all', async (_, res) => {
     const values = await db.query('SELECT * from values');
     res.send(values.rows);
+  });
+
+  app.get('/values/current', async (req, res) => {
+    const values = await client.hGetAll('values');
+    res.send(values);
+  });
+
+  app.post('/values', async (req, res) => {
+    const index = req.body.index;
+
+    if (parseInt(index) > 40) {
+      return res.status(422).send('Index too high');
+    }
+
+    client.hSet('values', index, 'Nothing yet!');
+    publisher.publish('insert', index);
+    db.query('INSERT INTO values(number) VALUES($1)', [index]);
+
+    res.send({ working: true });
   });
 
   app.get('/foo', async (_, res: Response) => {
