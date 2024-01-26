@@ -1,11 +1,20 @@
+version: '3'
+
 services:
-  frontend:
-    restart: always
+  next-app:
+    container_name: next-app
     build:
       context: .
       dockerfile: dev.Dockerfile
-    ports:
-      - 5174:5173
     volumes:
-      - /app/node_modules
-      - .:/app
+      - /code/node_modules
+      - .:/code
+    restart: always
+    ports:
+      - 3000:3000
+    networks:
+      - docker-advanced-dev
+
+networks:
+  docker-advanced-dev:
+    external: true

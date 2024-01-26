@@ -6,5 +6,6 @@ docker-compose*
 .gitignore
 README.md
 LICENSE
+dist
 .vscode
 coverage*

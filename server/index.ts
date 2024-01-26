@@ -1,4 +1,3 @@
-import cors from 'cors';
 import type { Response } from 'express';
 import express from 'express';
 import { createClient } from 'redis';
@@ -8,7 +7,7 @@ const port = 5000;
 
 async function main() {
   const app = express();
-  app.use(cors());
+  // app.use(cors());
 
   const client = await createClient({
     url: 'redis://redis:6379',

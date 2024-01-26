@@ -1,11 +1,14 @@
-FROM node:18-alpine
+FROM node:18-slim
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
+WORKDIR /code
 
-WORKDIR /app
+COPY pnpm-lock.yaml package.json  ./
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
-COPY package.json package-lock.json ./
-RUN npm ci
+COPY app public next.config.mjs tsconfig.json ./
 
-COPY . .
+CMD pnpm dev
 
-EXPOSE 5173
-CMD [ "npm", "run", "dev"]
+
