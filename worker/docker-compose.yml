@@ -4,6 +4,10 @@ services:
     image: redis
     ports:
       - 6379:6379
+    networks:
+      - worker
+    volumes:
+      - redis:/data
 
   worker:
     restart: unless-stopped
@@ -13,3 +17,15 @@ services:
       - ./:/app
     depends_on:
       - redis
+    networks:
+      - worker
+      - server-redis
+
+volumes:
+  redis:
+
+networks:
+  server-redis:
+    external: true
+  worker:
+    external: false

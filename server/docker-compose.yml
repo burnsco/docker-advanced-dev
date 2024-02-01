@@ -4,6 +4,15 @@ services:
     restart: always
     volumes:
       - redis:/data
+    networks:
+      - server-pg-redis
+
+  redis-insight:
+    image: redislabs/redisinsight:latest
+    ports:
+      - 8001:8001
+    networks:
+      - server-pg-redis
 
   postgres:
     image: postgres:latest
@@ -15,6 +24,8 @@ services:
       - postgres:/var/lib/postgresql/data
     depends_on:
       - redis
+    networks:
+      - server-pg-redis
 
   pgadmin:
     image: dpage/pgadmin4:latest
@@ -28,6 +39,8 @@ services:
       - pgadmin:/var/lib/pgadmin
     depends_on:
       - postgres
+    networks:
+      - server-pg-redis
 
   simpleweb:
     restart: unless-stopped
@@ -39,6 +52,16 @@ services:
       - 5001:5000
     depends_on:
       - redis
+    networks:
+      - server-pg-redis
+      - server-redis
+      - web-server
+
+networks:
+  web-server:
+  server-redis:
+  server-pg-redis:
+    external: false
 
 volumes:
   redis:

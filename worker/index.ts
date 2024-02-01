@@ -17,10 +17,11 @@ const client = await createClient({
   .connect();
 
 const sub = client.duplicate();
+
 sub.on('error', (err) => console.error(err));
 await sub.connect();
 
-sub.on('message', (channel, message) => {
+sub.on('message', (_, message) => {
   client.hSet('values', message, fib(parseInt(message)));
 });
 

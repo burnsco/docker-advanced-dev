@@ -13,8 +13,8 @@ services:
     ports:
       - 3000:3000
     networks:
-      - docker-advanced-dev
+      - web-server
 
 networks:
-  docker-advanced-dev:
+  web-server:
     external: true
