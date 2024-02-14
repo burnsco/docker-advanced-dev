@@ -9,8 +9,11 @@ services:
 
   redis-insight:
     image: redislabs/redisinsight:latest
+    restart: always
     ports:
-      - 8001:8001
+      - 5540:5540
+    volumes:
+      - redis-insight:/data
     networks:
       - server-pg-redis
 
@@ -65,5 +68,6 @@ networks:
 
 volumes:
   redis:
+  redis-insight:
   postgres:
   pgadmin:

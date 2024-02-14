@@ -12,4 +12,4 @@ pool.on('error', () => console.log('Lost PG Connection!'));
 
 export const query = (text, params) => pool.query(text, params);
 
-// query('CREATE TABLE IF NOT EXISTS values (number INT)');
+// query('CREATE TABLE IF NOT EXISTS values (number INT)')

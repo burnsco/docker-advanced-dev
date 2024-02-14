@@ -1,3 +1,5 @@
+import bodyParser from 'body-parser';
+import cors from 'cors';
 import type { Response } from 'express';
 import express from 'express';
 import { createClient } from 'redis';
@@ -7,7 +9,8 @@ const port = 5000;
 
 async function main() {
   const app = express();
-  // app.use(cors());
+  app.use(cors());
+  app.use(bodyParser.json())
 
   const client = await createClient({
     url: 'redis://redis:6379',
@@ -28,11 +31,12 @@ async function main() {
 
     views
       ? // set the views key, but parse it as int first then add one
-        await client.set('views', parseInt(views) + 1)
+      await client.set('views', parseInt(views) + 1)
       : await client.disconnect();
   });
 
   app.get('/values/all', async (_, res) => {
+    await db.query()
     const values = await db.query('SELECT * from values');
     res.send(values.rows);
   });
@@ -43,7 +47,7 @@ async function main() {
   });
 
   app.post('/values', async (req, res) => {
-    const index = req.body.index;
+    const index = req.body.index
 
     if (parseInt(index) > 40) {
       return res.status(422).send('Index too high');
@@ -53,7 +57,9 @@ async function main() {
     publisher.publish('insert', index);
     db.query('INSERT INTO values(number) VALUES($1)', [index]);
 
-    res.send({ working: true });
+
+
+    res.status(200).send(`Received Index: ${index}`)
   });
 
   app.get('/foo', async (_, res: Response) => {
