@@ -36,7 +36,6 @@ async function main() {
   });
 
   app.get('/values/all', async (_, res) => {
-    await db.query()
     const values = await db.query('SELECT * from values');
     res.send(values.rows);
   });
