@@ -35,12 +35,19 @@ async function main() {
       : await client.disconnect();
   });
 
+  app.get('/createtable', async (_, res) => {
+    await db.query('CREATE TABLE IF NOT EXISTS values (number INT)')
+    res.json({
+      it: 'is-done'
+    })
+  })
+
   app.get('/values/all', async (_, res) => {
     const values = await db.query('SELECT * from values');
     res.send(values.rows);
   });
 
-  app.get('/values/current', async (req, res) => {
+  app.get('/values/current', async (_, res) => {
     const values = await client.hGetAll('values');
     res.send(values);
   });
